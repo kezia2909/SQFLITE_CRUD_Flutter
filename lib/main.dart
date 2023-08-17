@@ -122,6 +122,12 @@ class _HomePageState extends State<HomePage> {
     _refreshJournals();
   }
 
+  void _deleteItem(int id) async {
+    await SQLHelper.deleteItem(id);
+    print("success delete");
+    _refreshJournals();
+  }
+
   void _showForm(int? id) async {
     if (id != null) {
       final existingJournal =
@@ -230,7 +236,7 @@ class _HomePageState extends State<HomePage> {
                     Icons.delete,
                     color: Theme.of(context).colorScheme.tertiary,
                   ),
-                  onPressed: () => (),
+                  onPressed: () => _deleteItem(_journals[index]['id']),
                 )
               ]),
             ),

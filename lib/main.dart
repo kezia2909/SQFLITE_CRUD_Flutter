@@ -101,10 +101,12 @@ class _HomePageState extends State<HomePage> {
 
   void _refreshJournals() async {
     final data = await SQLHelper.getItems();
+
     setState(() {
       _journals = data;
       _isLoading = false;
     });
+
     print("count journals : ${_journals.length}");
   }
 
@@ -114,13 +116,21 @@ class _HomePageState extends State<HomePage> {
     _refreshJournals();
   }
 
+  Future<void> _updateItem(int id) async {
+    await SQLHelper.updateItem(
+        id, _titleController.text, _descriptionController.text);
+    _refreshJournals();
+  }
+
   void _showForm(int? id) async {
     if (id != null) {
       final existingJournal =
           _journals.firstWhere((element) => element['id'] == id);
+
       _titleController.text = existingJournal['title'];
       _descriptionController.text = existingJournal['description'];
     }
+
     showModalBottomSheet(
       context: context,
       elevation: 5,
@@ -155,7 +165,7 @@ class _HomePageState extends State<HomePage> {
                 if (id == null) {
                   await _addItem();
                 } else {
-                  // await _updateItem(id);
+                  await _updateItem(id);
                 }
 
                 _titleController.text = "";
@@ -213,7 +223,7 @@ class _HomePageState extends State<HomePage> {
                     Icons.edit,
                     color: Theme.of(context).colorScheme.primary,
                   ),
-                  onPressed: () => (),
+                  onPressed: () => _showForm(_journals[index]['id']),
                 ),
                 IconButton(
                   icon: Icon(

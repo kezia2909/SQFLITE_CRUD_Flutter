@@ -114,17 +114,26 @@ class _HomePageState extends State<HomePage> {
     await SQLHelper.createItem(
         _titleController.text, _descriptionController.text);
     _refreshJournals();
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text("Adding item success"),
+    ));
   }
 
   Future<void> _updateItem(int id) async {
     await SQLHelper.updateItem(
         id, _titleController.text, _descriptionController.text);
     _refreshJournals();
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text("Update success"),
+    ));
   }
 
-  void _deleteItem(int id) async {
+  void _deleteItem(int id, String title) async {
     await SQLHelper.deleteItem(id);
-    print("success delete");
+    print("success delete $title");
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text("Succes delete \"$title\""),
+    ));
     _refreshJournals();
   }
 
@@ -153,6 +162,7 @@ class _HomePageState extends State<HomePage> {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             TextField(
+              autofocus: true,
               controller: _titleController,
               decoration: const InputDecoration(hintText: "Title"),
             ),
@@ -236,7 +246,8 @@ class _HomePageState extends State<HomePage> {
                     Icons.delete,
                     color: Theme.of(context).colorScheme.tertiary,
                   ),
-                  onPressed: () => _deleteItem(_journals[index]['id']),
+                  onPressed: () => _deleteItem(
+                      _journals[index]['id'], _journals[index]['title']),
                 )
               ]),
             ),

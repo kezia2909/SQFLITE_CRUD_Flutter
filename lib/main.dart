@@ -210,7 +210,7 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.primary,
         foregroundColor: Theme.of(context).colorScheme.onPrimary,
-        title: Text("SQLITE"),
+        title: Text("SQLITE FIX"),
       ),
       body: ListView.builder(
         itemCount: _journals.length,

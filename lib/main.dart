@@ -161,6 +161,25 @@ class _HomePageState extends State<HomePage> {
               _journals[index]['title'],
             ),
             subtitle: Text(_journals[index]['description']),
+            trailing: SizedBox(
+              width: 100,
+              child: Row(children: [
+                IconButton(
+                  icon: Icon(
+                    Icons.edit,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  onPressed: () => (),
+                ),
+                IconButton(
+                  icon: Icon(
+                    Icons.delete,
+                    color: Theme.of(context).colorScheme.tertiary,
+                  ),
+                  onPressed: () => (),
+                )
+              ]),
+            ),
           ),
         ),
       ),

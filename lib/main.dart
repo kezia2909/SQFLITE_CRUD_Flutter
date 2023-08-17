@@ -30,7 +30,56 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<Map<String, dynamic>> _journals = [];
+  List<Map<String, dynamic>> _journals = [
+    {
+      "title": "hello",
+      "description": "hello world :D",
+    },
+    {
+      "title": "study",
+      "description": "flutter sqlite",
+    },
+    {
+      "title": "fighting",
+      "description": "go go go",
+    },
+    {
+      "title": "hello",
+      "description": "hello world :D",
+    },
+    {
+      "title": "study",
+      "description": "flutter sqlite",
+    },
+    {
+      "title": "fighting",
+      "description": "go go go",
+    },
+    {
+      "title": "hello",
+      "description": "hello world :D",
+    },
+    {
+      "title": "study",
+      "description": "flutter sqlite",
+    },
+    {
+      "title": "fighting",
+      "description": "go go go",
+    },
+    {
+      "title": "hello",
+      "description": "hello world :D",
+    },
+    {
+      "title": "study",
+      "description": "flutter sqlite",
+    },
+    {
+      "title": "fighting",
+      "description": "go go go",
+    },
+  ];
 
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
@@ -89,10 +138,35 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
         title: Text("SQLITE"),
       ),
+      body: ListView.builder(
+        itemCount: _journals.length,
+        itemBuilder: (context, index) => Card(
+          color: Theme.of(context).colorScheme.primaryContainer,
+          margin: const EdgeInsets.all(15),
+          child: ListTile(
+            titleTextStyle: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+              color: Theme.of(context).colorScheme.onPrimaryContainer,
+            ),
+            subtitleTextStyle: TextStyle(
+              fontSize: 16,
+              color: Theme.of(context).colorScheme.secondary,
+            ),
+            title: Text(
+              _journals[index]['title'],
+            ),
+            subtitle: Text(_journals[index]['description']),
+          ),
+        ),
+      ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
         onPressed: () {
           _showForm();
         },

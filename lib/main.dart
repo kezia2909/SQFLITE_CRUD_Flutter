@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_sqflite_crud/sql_helper.dart';
 
 void main() {
   runApp(const MyApp());
@@ -31,60 +32,95 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<Map<String, dynamic>> _journals = [
-    {
-      "title": "hello",
-      "description": "hello world :D",
-    },
-    {
-      "title": "study",
-      "description": "flutter sqlite",
-    },
-    {
-      "title": "fighting",
-      "description": "go go go",
-    },
-    {
-      "title": "hello",
-      "description": "hello world :D",
-    },
-    {
-      "title": "study",
-      "description": "flutter sqlite",
-    },
-    {
-      "title": "fighting",
-      "description": "go go go",
-    },
-    {
-      "title": "hello",
-      "description": "hello world :D",
-    },
-    {
-      "title": "study",
-      "description": "flutter sqlite",
-    },
-    {
-      "title": "fighting",
-      "description": "go go go",
-    },
-    {
-      "title": "hello",
-      "description": "hello world :D",
-    },
-    {
-      "title": "study",
-      "description": "flutter sqlite",
-    },
-    {
-      "title": "fighting",
-      "description": "go go go",
-    },
+    // {
+    //   "id": 1,
+    //   "title": "hello",
+    //   "description": "hello world :D",
+    // },
+    // {
+    //   "id": 2,
+    //   "title": "study",
+    //   "description": "flutter sqlite",
+    // },
+    // {
+    //   "id": 3,
+    //   "title": "fighting",
+    //   "description": "go go go",
+    // },
+    // {
+    //   "id": 4,
+    //   "title": "hello",
+    //   "description": "hello world :D",
+    // },
+    // {
+    //   "id": 5,
+    //   "title": "study",
+    //   "description": "flutter sqlite",
+    // },
+    // {
+    //   "id": 6,
+    //   "title": "fighting",
+    //   "description": "go go go",
+    // },
+    // {
+    //   "id": 7,
+    //   "title": "hello",
+    //   "description": "hello world :D",
+    // },
+    // {
+    //   "id": 8,
+    //   "title": "study",
+    //   "description": "flutter sqlite",
+    // },
+    // {
+    //   "id": 9,
+    //   "title": "fighting",
+    //   "description": "go go go",
+    // },
+    // {
+    //   "id": 10,
+    //   "title": "hello",
+    //   "description": "hello world :D",
+    // },
+    // {
+    //   "id": 11,
+    //   "title": "study",
+    //   "description": "flutter sqlite",
+    // },
+    // {
+    //   "id": 12,
+    //   "title": "fighting",
+    //   "description": "go go go",
+    // },
   ];
 
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
 
-  void _showForm() {
+  bool _isLoading = true;
+
+  void _refreshJournals() async {
+    final data = await SQLHelper.getItems();
+    setState(() {
+      _journals = data;
+      _isLoading = false;
+    });
+    print("count journals : ${_journals.length}");
+  }
+
+  Future<void> _addItem() async {
+    await SQLHelper.createItem(
+        _titleController.text, _descriptionController.text);
+    _refreshJournals();
+  }
+
+  void _showForm(int? id) async {
+    if (id != null) {
+      final existingJournal =
+          _journals.firstWhere((element) => element['id'] == id);
+      _titleController.text = existingJournal['title'];
+      _descriptionController.text = existingJournal['description'];
+    }
     showModalBottomSheet(
       context: context,
       elevation: 5,
@@ -115,12 +151,19 @@ class _HomePageState extends State<HomePage> {
               height: 20,
             ),
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
+                if (id == null) {
+                  await _addItem();
+                } else {
+                  // await _updateItem(id);
+                }
+
                 _titleController.text = "";
                 _descriptionController.text = "";
+
                 Navigator.of(context).pop();
               },
-              child: Text("Submit"),
+              child: Text(id == null ? "Create" : "Update"),
             ),
           ],
         ),
@@ -132,6 +175,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    _refreshJournals();
   }
 
   @override
@@ -168,7 +212,7 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Theme.of(context).colorScheme.primary,
         foregroundColor: Theme.of(context).colorScheme.onPrimary,
         onPressed: () {
-          _showForm();
+          _showForm(null);
         },
         tooltip: 'Increment',
         child: const Icon(Icons.add),
